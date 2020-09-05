@@ -48,3 +48,9 @@ h1, h2, h3, h4 {
 h4 {
   margin-top: 0px;
 }
+
+.btn-primary {
+    color: #333;
+    background-color: #fff;
+    border-color: #fff;
+}
