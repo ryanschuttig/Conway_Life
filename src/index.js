@@ -2,9 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+class Box extends React.Component {
+  selectBox = () => {
+    this.props.selectBox(this.props.row, this.props.col);
+  }
+
+  render() {
+    return (
+      <div
+        className={this.props.boxClass}
+        id={this.props.id}
+        onClick={this.selectBox}
+      />
+    );
+  }
+}
+
 class Grid extends React.Component {
   render() {
-    const width = this.props.cols * 14;
+    const width = (this.props.cols * 16);
     var rowsArr = []
 
     var boxClass = "";
@@ -14,7 +30,7 @@ class Grid extends React.Component {
 
         boxClass = this.props.gridFull[i][j] ? "box on" : "box off";
         rowsArr.push(
-          <box
+          <Box
             boxClass={boxClass}
             key={boxId}
             boxId={boxId}
@@ -22,17 +38,18 @@ class Grid extends React.Component {
             col={j}
             selectBox={this.props.selectBox}
           />
-        )
+        );
       }
     }
 
     return (
       <div className="grid" style={{ width: width }}>
-        {{ rowsArr }}
+        {rowsArr}
       </div>
     );
   }
 }
+
 class Main extends React.Component {
   constructor() {
     super();
@@ -44,6 +61,14 @@ class Main extends React.Component {
       generation: 0,
       gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
     }
+  }
+
+  selectBox = (row, col) => {
+    let gridCopy = arrayClone(this.state.gridFull);
+    gridCopy[row][col] = !gridCopy[row][col];
+    this.setState({
+      gridFull: gridCopy
+    })
   }
 
   render() {
@@ -58,8 +83,12 @@ class Main extends React.Component {
         />
         <h2>Generations: {this.state.generation}</h2>
       </div>
-    )
+    );
   }
+}
+
+function arrayClone(arr) {
+  return JSON.parse(JSON.stringify(arr));
 }
 
 ReactDOM.render(
